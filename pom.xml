@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.linkeddatafragments</groupId>
     <artifactId>ldfserver</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.1-wmf</version>
     <packaging>war</packaging>
     <name>Linked Data Fragments Server</name>
     <url>http://linkeddatafragments.org</url>
@@ -132,8 +132,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -142,6 +142,7 @@
                 <configuration>
                     <warSourceDirectory>WebContent</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+					<attachClasses>true</attachClasses>
                 </configuration>
             </plugin>
             <plugin>
