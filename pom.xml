@@ -55,17 +55,18 @@
     </contributors>
     <properties>
         <jettyVersion>9.4.12.v20180830</jettyVersion>
+		<jenaVersion>3.1.0</jenaVersion>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-core</artifactId>
-            <version>3.1.0</version>
+            <version>${jenaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-arq</artifactId>
-            <version>3.1.0</version>
+            <version>${jenaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -113,7 +114,7 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-tdb</artifactId>
-            <version>3.1.0</version>
+            <version>${jenaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.rdfhdt</groupId>
