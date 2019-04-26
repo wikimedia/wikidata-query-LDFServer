@@ -14,6 +14,7 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.system.Txn;
 import org.apache.jena.tdb.TDBFactory;
 
 import org.linkeddatafragments.datasource.AbstractRequestProcessorForTriplePatterns;
@@ -113,7 +114,7 @@ public class JenaTDBBasedRequestProcessorForTPFs
             Model triples = ModelFactory.createDefaultModel();
 
             try (QueryExecution qexec = QueryExecutionFactory.create(query, model, map)) {
-                qexec.execConstruct(triples);
+                Txn.executeRead(tdb, () -> qexec.execConstruct(triples));
             }
 
             if (triples.isEmpty()) {
@@ -122,16 +123,17 @@ public class JenaTDBBasedRequestProcessorForTPFs
 
             // Try to get an estimate
             long size = triples.size();
-            long estimate = -1;
-
-            try (QueryExecution qexec = QueryExecutionFactory.create(countQuery, model, map)) {
-                ResultSet results = qexec.execSelect();
-                if (results.hasNext()) {
-                    QuerySolution soln = results.nextSolution() ;
-                    Literal literal = soln.getLiteral("count");
-                    estimate = literal.getLong();
+            long estimate = Txn.calculateRead(tdb, () -> {
+                try (QueryExecution qexec = QueryExecutionFactory.create(countQuery, model, map)) {
+                    ResultSet results = qexec.execSelect();
+                    if (results.hasNext()) {
+                        QuerySolution soln = results.nextSolution();
+                        Literal literal = soln.getLiteral("count");
+                        return literal.getLong();
+                    }
+                    return -1L;
                 }
-            }
+            });
 
             /*GraphStatisticsHandler stats = model.getGraph().getStatisticsHandler();
             if (stats != null) {
